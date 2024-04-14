@@ -1,0 +1,316 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Messenger.Presentation</name>
+    </assembly>
+    <members>
+        <member name="M:Messenger.Presentation.Controllers.AccountsController.GetAccounts(Shared.RequestFeatures.AccountParameters)">
+            <summary>
+            Returns accounts
+            </summary>
+            <param name="accountParameters">Request parameters</param>
+            <response code="200">Returns all accounts</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.AccountsController.GetAccount(System.Guid)">
+            <summary>
+            Returns an account by id
+            </summary>
+            <param name="id">The account id</param>
+            <response code="200">Returns the account</response>
+            <response code="404">If the account doesn't exist in the database</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.AccountsController.DeleteAccount(System.Guid)">
+            <summary>
+            Deletes an account by id
+            </summary>
+            <param name="id">The account id</param>
+            <response code="200">Deletes the account</response>
+            <response code="404">If the account doesn't exist in the database</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.AccountsController.UpdateAccount(System.Guid,Shared.DataTransferObjects.AccountDto.AccountForUpdateDto)">
+            <summary>
+            Updates an account
+            </summary>
+            <param name="id">The account id</param>
+            <param name="account">The account data for update</param>
+            <response code="204">Updated successfully</response>
+            <response code="400">If the request body is null</response>
+            <response code="404">If the account doesn't exist in the database</response>
+            <response code="422">If the account data for update is invalid</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.AuthenticationController.RegisterUser(Shared.DataTransferObjects.UserDto.UserForRegistrationDto)">
+            <summary>
+            Registers an user
+            </summary>
+            <param name="userForRegistration">The user data for registration</param>
+            <response code="201">Successfull registration</response>
+            <response code="400">If the request body is null</response>
+            <response code="422">If the user data is invalid</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.AuthenticationController.Authenticate(Shared.DataTransferObjects.UserDto.UserForAuthenticationDto)">
+            <summary>
+            Authenticates an user
+            </summary>
+            <param name="user">The user data for authentication</param>
+            <returns>A newly created access token and a refresh token</returns>
+            <response code="200">Returns an access token and a refresh token</response>
+            <response code="400">If the request body is null</response>
+            <response code="422">If the user data is invalid</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.ChannelMessagesController.GetChannelMessages(System.Guid,Shared.RequestFeatures.ChannelMessageParameters)">
+            <summary>
+            Returns messages of a channel
+            </summary>
+            <param name="messageParameters">Request parameters</param>
+            <param name="channelId">The channel id</param>
+            <response code="200">Returns all messages of the channel</response>
+            <response code="404">If the channel doesn't exist in the database</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.ChannelMessagesController.GetChatMessage(System.Guid)">
+            <summary>
+            Returns a message by id
+            </summary>
+            <param name="messageId">The message id</param>
+            <response code="200">Returns the message</response>
+            <response code="404">If the message doesn't exist in the database</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.ChannelMessagesController.CreateChannelMessage(System.Guid,Shared.DataTransferObjects.ChannelMessageDto.ChannelMessageForCreationDto)">
+            <summary>
+            Creates a message for a channel
+            </summary>
+            <param name="channelId">The channel id</param>
+            <param name="channelMessage">The message data for creation</param>
+            <response code="201">Returns the newly created message</response>
+            <response code="400">If the request body is null</response>
+            <response code="404">If the channel doesn't exist in the database</response>
+            <response code="422">If the message data for creation is invalid</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.ChannelMessagesController.DeleteChannelMessage(System.Guid)">
+            <summary>
+            Deletes a message
+            </summary>
+            <param name="channelMessageId">The message id</param>
+            <response code="204">Successful removal</response>
+            <response code="404">If the message doesn't exist in the database</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.ChannelsController.GetChannels(Shared.RequestFeatures.ChannelParameters)">
+            <summary>
+            Returns channels
+            </summary>
+            <param name="channelParameters">Request parameters</param>
+            <response code="200">Returns all channels</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.ChannelsController.GetAccountChannels(System.Guid,Shared.RequestFeatures.ChannelParameters)">
+            <summary>
+            Returns all channels of an account
+            </summary>
+            <param name="channelsParameters">Request parameters</param>
+            <param name="accountId">The account id</param>
+            <response code="200">Returns all channels of the account</response>
+            <response code="404">If the account doesn't exist in the database</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.ChannelsController.GetChannel(System.Guid)">
+            <summary>
+            Returns a channel by id
+            </summary>
+            <param name="channelId">The channel id</param>
+            <response code="200">Returns the channel</response>
+            <response code="404">If the channel doesn't exist in the database</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.ChannelsController.CreateChannel(System.Guid,Shared.DataTransferObjects.ChannelDto.ChannelForCreationDto)">
+            <summary>
+            Creates a channel
+            </summary>
+            <param name="accountId">The account id</param>
+            <param name="channel">The channel data for creation</param>
+            <response code="201">Returns the newly created channel</response>
+            <response code="400">If the request body is null</response>
+            <response code="404">If the account doesn't exist in the database</response>
+            <response code="422">If the channel data for creation is invalid</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.ChannelsController.AddMemberToChannel(System.Guid,System.Guid)">
+            <summary>
+            Adds a member to a channel 
+            </summary>
+            <param name="accountId">The account id</param>
+            <param name="channelId">The channel id</param>
+            <response code="200">The member added successfully</response>
+            <response code="404">If the account doesn't exist in the database or if the channel doesn't exist in the database</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.ChannelsController.DeleteChannel(System.Guid)">
+            <summary>
+            Deletes a channel by id
+            </summary>
+            <param name="channelId">The channel id</param>
+            <response code="204">Deleted the channel successfully</response>
+            <response code="404">If the channel doesn't exist in the database</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.ChannelsController.LeaveChannel(System.Guid,System.Guid)">
+            <summary>
+            Removes a member from a channel 
+            </summary>
+            <param name="channelId">The channel id</param>
+            <param name="accountId">The account id</param>
+            <response code="204">Removed successfully</response>
+            <response code="404">If the account doesn't exist in the database or if the channel doesn't exist in the database</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.ChannelsController.UpdateChannel(System.Guid,Shared.DataTransferObjects.ChannelDto.ChannelForUpdateDto)">
+            <summary>
+            Updates a channel
+            </summary>
+            <param name="channelId">The channel id</param>
+            <param name="channel">The channel data for update</param>
+            <response code="204">Updated successfully</response>
+            <response code="400">If the request body is null</response>
+            <response code="404">If the channel doesn't exist in the database</response>
+            <response code="422">If the channel data for update is invalid</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.ChatMessagesController.GetChatMessages(System.Guid,Shared.RequestFeatures.ChatMessageParameters)">
+            <summary>
+            Returns messages of a chat
+            </summary>
+            <param name="messageParameters">Request parameters</param>
+            <param name="chatId">The chat id</param>
+            <response code="200">Returns all messages of the chat</response>
+            <response code="404">If the chat doesn't exist in the database</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.ChatMessagesController.GetChatMessage(System.Guid)">
+            <summary>
+            Returns a message by id
+            </summary>
+            <param name="messageId">The message id</param>
+            <response code="200">Returns the message</response>
+            <response code="404">If the message doesn't exist in the database</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.ChatMessagesController.CreateChatMessage(System.Guid,Shared.DataTransferObjects.ChatMessageDto.ChatMessageForCreationDto)">
+            <summary>
+            Creates a message for a chat
+            </summary>
+            <param name="chatId">The chat id</param>
+            <param name="chatMessage">The message data for creation</param>
+            <response code="201">Returns the newly created message</response>
+            <response code="400">If the request body is null</response>
+            <response code="404">If the chat doesn't exist in the database</response>
+            <response code="422">If the message data for creation is invalid</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.ChatMessagesController.DeleteChatMessage(System.Guid)">
+            <summary>
+            Deletes a message
+            </summary>
+            <param name="chatMessageId">The message id</param>
+            <response code="204">Successful removal</response>
+            <response code="404">If the message doesn't exist in the database</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.ChatsController.GetChats(Shared.RequestFeatures.ChatParameters)">
+            <summary>
+            Returns chats
+            </summary>
+            <param name="chatParameters">Request parameters</param>
+            <response code="200">Returns all chats</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.ChatsController.GetAccountChats(System.Guid,Shared.RequestFeatures.ChatParameters)">
+            <summary>
+            Returns all chats of an account
+            </summary>
+            <param name="chatsParameters">Request parameters</param>
+            <param name="accountId">The account id</param>
+            <response code="200">Returns all chats of the account</response>
+            <response code="404">If the account doesn't exist in the database</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.ChatsController.GetChat(System.Guid)">
+            <summary>
+            Returns a chat by id
+            </summary>
+            <param name="chatId">The chat id</param>
+            <response code="200">Returns the chat</response>
+            <response code="404">If the chat doesn't exist in the database</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.ChatsController.CreateChat(System.Guid,Shared.DataTransferObjects.ChatDto.ChatForCreationDto)">
+            <summary>
+            Creates a chat
+            </summary>
+            <param name="accountId">The account id</param>
+            <param name="chat">The chat data for creation</param>
+            <response code="201">Returns the newly created chat</response>
+            <response code="400">If the request body is null</response>
+            <response code="404">If the account doesn't exist in the database</response>
+            <response code="422">If the chat data for creation is invalid</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.ChatsController.AddMemberToChat(System.Guid,System.Guid)">
+            <summary>
+            Adds a member to a chat 
+            </summary>
+            <param name="accountId">The account id</param>
+            <param name="chatId">The chat id</param>
+            <response code="200">The member added successfully</response>
+            <response code="404">If the account doesn't exist in the database or if the chat doesn't exist in the database</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.ChatsController.DeleteChat(System.Guid)">
+            <summary>
+            Deletes a chat by id
+            </summary>
+            <param name="chatId">The chat id</param>
+            <response code="204">Deleted the chat successfully</response>
+            <response code="404">If the chat doesn't exist in the database</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.ChatsController.LeaveChat(System.Guid,System.Guid)">
+            <summary>
+            Removes a member from a chat 
+            </summary>
+            <param name="chatId">The chat id</param>
+            <param name="accountId">The acoount id</param>
+            <response code="204">Removed successfully</response>
+            <response code="404">If the account doesn't exist in the database or if the chat doesn't exist in the database</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.ChatsController.UpdateChat(System.Guid,Shared.DataTransferObjects.ChatDto.ChatForUpdateDto)">
+            <summary>
+            Updates a chat
+            </summary>
+            <param name="chatId">The chat id</param>
+            <param name="chat">The chat data for update</param>
+            <response code="204">Updated successfully</response>
+            <response code="400">If the request body is null</response>
+            <response code="404">If the chat doesn't exist in the database</response>
+            <response code="422">If the chat data for update is invalid</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.ContactsController.GetAccountContacts(System.Guid,Shared.RequestFeatures.ContactParameters)">
+            <summary>
+            Returns contacs of an account
+            </summary>
+            <param name="contactParameters">Request parameters</param>
+            <param name="accountId">The account id</param>
+            <response code="200">Returns all contacs of the account</response>
+            <response code="404">If the account doesn't exist in the database</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.ContactsController.CreateAccountContact(System.Guid,Shared.DataTransferObjects.ContactDto.ContactForCreationDto)">
+            <summary>
+            Creates a contact for an account 
+            </summary>
+            <param name="contact">The contact data for creation</param>
+            <param name="accountId">The account id</param>
+            <response code="201">Successful creation</response>
+            <response code="400">If the request body is null</response>
+            <response code="404">If the account doesn't exist in the database</response>
+            <response code="422">If the contact data for creation is invalid</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.ContactsController.DeleteAccountContact(System.Guid,System.Guid)">
+            <summary>
+            Deletes a contact of an account 
+            </summary>
+            <param name="id">The contact id</param>
+            <param name="accountId">The account id</param>
+            <response code="204">Successful removal</response>
+            <response code="404">If the account doesn't exist in the database or if the contact doesn't exist in the database</response>
+        </member>
+        <member name="M:Messenger.Presentation.Controllers.TokenController.Refresh(Shared.DataTransferObjects.UserDto.TokenDto)">
+            <summary>
+            Generates a new access token and refresh token
+            </summary>
+            <param name="tokenDto">The invalid acces token and the valid refresh token</param>
+            <returns>A newly created access token and a refresh token</returns>
+            <response code="200">Returns an access token and a refresh token</response>
+            <response code="400">If the request body is null or if the token has some invalid values.</response>
+            <response code="422">If the token data is invalid</response>
+        </member>
+    </members>
+</doc>

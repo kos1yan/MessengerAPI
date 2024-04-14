@@ -1,0 +1,26 @@
+version: '3.4'
+
+services:
+  messenger:
+    image: ${DOCKER_REGISTRY-}messenger
+    container_name: "messenger-api"
+    ports:
+        - "8080:8080"
+        - "8081:8081"
+    build:
+      context: .
+      dockerfile: Messenger/Dockerfile
+  sqlserver2022:
+    image: mcr.microsoft.com/mssql/server:latest
+    container_name: "sql-server2022"
+    ports:
+        - "1401:1433"
+    environment:
+        ACCEPT_EULA: "Y"
+        MSSQL_SA_PASSWORD: "BelovKostya16012004"
+    volumes:
+        - db-data:/var/opt/mssql
+volumes:
+    db-data:
+         
+
