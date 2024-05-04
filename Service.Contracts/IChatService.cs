@@ -28,5 +28,6 @@ namespace Service.Contracts
         Task<ChatMessageDto> CreateChatMessageAsync(Guid chatId, ChatMessageForCreationDto messageForCreation, bool trackChanges);
         Task DeleteChatMessageAsync(Guid chatMessageId, bool trackChanges);
         Task AddMemberToChatAsync(Guid accountId, Guid chatId, bool chatTrackChanges, bool accountTrackChanges);
+        Task UpdateChatMessageAsync(Guid chatMessageId, ChatMessageForUpdateDto chatMessageForUpdate, bool trackChanges);
     }
 }

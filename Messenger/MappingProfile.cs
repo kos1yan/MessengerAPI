@@ -31,6 +31,7 @@ namespace Messenger
             CreateMap<ChatForUpdateDto, Chat>().ForMember(s => s.Image, opt => opt.Ignore());
             CreateMap<ChannelForUpdateDto, Channel>().ForMember(s => s.Image, opt => opt.Ignore());
             CreateMap<UserForRegistrationDto, User>().ForMember(s => s.UserName, opt => opt.MapFrom(x => x.Email));
+            CreateMap<ChatMessageForUpdateDto, ChatMessage>().ForMember(s => s.Image, opt => opt.Ignore());
         }
     }
 }

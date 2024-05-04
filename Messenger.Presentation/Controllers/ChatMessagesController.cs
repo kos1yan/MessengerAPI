@@ -104,5 +104,24 @@ namespace Messenger.Presentation.Controllers
             await _service.ChatService.DeleteChatMessageAsync(chatMessageId, trackChanges: false);
             return NoContent();
         }
+
+        /// <summary>
+        /// Updates a chatMessage
+        /// </summary>
+        /// <param name="chatMessageId">The chatMessage id</param>
+        /// <param name="chatMessageForUpdate">The message data for update</param>
+        /// <response code="204">Updated successfully</response>
+        /// <response code="400">If the request body is null</response>
+        /// <response code="404">If the chatMessage doesn't exist in the database</response>
+        [HttpPut("{chatMessageId:guid}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        public async Task<IActionResult> UpdateChatMessage(Guid chatMessageId, [FromBody] ChatMessageForUpdateDto chatMessageForUpdate)
+        {
+            await _service.ChatService.UpdateChatMessageAsync(chatMessageId, chatMessageForUpdate, trackChanges: true);
+            return NoContent();
+        }
     }
 }

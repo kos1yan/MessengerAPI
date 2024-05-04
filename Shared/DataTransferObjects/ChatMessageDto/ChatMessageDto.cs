@@ -13,5 +13,7 @@ namespace Shared.DataTransferObjects.ChatMessageDto
         public string? Image { get; init; }
         public DateTime PublicationTime { get; init; }
         public Guid AccountId { get; init; }
+        public string? AccountName { get; set; }
+        public string? AccountImage { get; set; }
     }
 }

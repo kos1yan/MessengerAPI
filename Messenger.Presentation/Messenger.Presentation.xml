@@ -201,6 +201,16 @@
             <response code="204">Successful removal</response>
             <response code="404">If the message doesn't exist in the database</response>
         </member>
+        <member name="M:Messenger.Presentation.Controllers.ChatMessagesController.UpdateChatMessage(System.Guid,Shared.DataTransferObjects.ChatMessageDto.ChatMessageForUpdateDto)">
+            <summary>
+            Updates a chatMessage
+            </summary>
+            <param name="chatMessageId">The chatMessage id</param>
+            <param name="chatMessageForUpdate">The message data for update</param>
+            <response code="204">Updated successfully</response>
+            <response code="400">If the request body is null</response>
+            <response code="404">If the chatMessage doesn't exist in the database</response>
+        </member>
         <member name="M:Messenger.Presentation.Controllers.ChatsController.GetChats(Shared.RequestFeatures.ChatParameters)">
             <summary>
             Returns chats

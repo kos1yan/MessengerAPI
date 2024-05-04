@@ -111,6 +111,7 @@ namespace Service
             if (chat is null) throw new ChatNotFoundException(chatId);
             if (chatForUpdate.Image != null)
             {
+                if (chat.Image != null) await _repository.Photo.DeletePhotoAsync(chat.Image);
                 var result = await _repository.Photo.AddPhotoAsync(chatForUpdate.Image);
                 chat.Image = result.Url.ToString();
             }
@@ -137,6 +138,16 @@ namespace Service
             if (chat is null) throw new ChatNotFoundException(chatId);
             var chatMessagesWithMetaData = await _repository.ChatMessage.GetChatMessagesAsync(chatId, chatMessageParameters, trackChanges);
             var chatMessagesDto = _mapper.Map<IEnumerable<ChatMessageDto>>(chatMessagesWithMetaData);
+
+            foreach (var message in chatMessagesDto)
+            {
+                var account = await _repository.Account.GetAccountAsync(message.AccountId, false);
+                if (account is null) continue;
+                
+                message.AccountName = account.UserName;
+                message.AccountImage = account.Image;
+            }
+
             return (chatMessages: chatMessagesDto, metaData: chatMessagesWithMetaData.MetaData);
         }
         public async Task<ChatMessageDto> CreateChatMessageAsync(Guid chatId, ChatMessageForCreationDto messageForCreation, bool trackChanges)
@@ -180,6 +191,22 @@ namespace Service
             var chat = await _repository.Chat.GetChatAsync(chatId, chatTrackChanges);
             if (chat is null) throw new ChatNotFoundException(chatId);
             chat.ChatMembers.Add(new ChatMember { ChatId = chatId, AccountId = accountId, ChatRole = ChatRoles.Member });
+            await _repository.SaveAsync();
+        }
+
+        public async Task UpdateChatMessageAsync(Guid chatMessageId, ChatMessageForUpdateDto chatMessageForUpdate, bool trackChanges)
+        {
+            var chatMessage = await _repository.ChatMessage.GetChatMessageAsync(chatMessageId, trackChanges);
+            if(chatMessage is null) throw new ChatMessageNotFoundException(chatMessageId);
+
+            if (chatMessageForUpdate.Image != null)
+            {
+                if(chatMessage.Image != null) await _repository.Photo.DeletePhotoAsync(chatMessage.Image);
+                var result = await _repository.Photo.AddPhotoAsync(chatMessageForUpdate.Image);
+                chatMessage.Image = result.Url.ToString();
+            }
+
+            _mapper.Map(chatMessageForUpdate, chatMessage);
             await _repository.SaveAsync();
         }
     }

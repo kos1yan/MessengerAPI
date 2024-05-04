@@ -105,6 +105,7 @@ namespace Service
             if(accountEntity is null) throw new AccountNotFoundException(accountId);
             if(account.Image != null)
             {
+                if (accountEntity.Image != null) await _repository.Photo.DeletePhotoAsync(accountEntity.Image);
                 var result = await _repository.Photo.AddPhotoAsync(account.Image);
                 accountEntity.Image = result.Url.ToString();
             }

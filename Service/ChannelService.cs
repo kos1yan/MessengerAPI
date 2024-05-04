@@ -110,6 +110,7 @@ namespace Service
             if (channel is null) throw new ChannelNotFoundException(channelId);
             if (channelForUpdate.Image != null)
             {
+                if (channel.Image != null) await _repository.Photo.DeletePhotoAsync(channel.Image);
                 var result = await _repository.Photo.AddPhotoAsync(channelForUpdate.Image);
                 channel.Image = result.Url.ToString();
             }
