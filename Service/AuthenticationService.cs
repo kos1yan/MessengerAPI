@@ -93,7 +93,6 @@ namespace Service
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, _user.Email),
                 new Claim(ClaimTypes.NameIdentifier, _user.AccountId.ToString(), nameof(Guid))
             };
 

@@ -45,7 +45,7 @@ namespace Messenger.Presentation.Controllers
                 {
                     ModelState.TryAddModelError(error.Code, error.Description);
                 }
-                return BadRequest(ModelState);
+                return new UnprocessableEntityObjectResult(ModelState);
             }
             return StatusCode(201);
         }
@@ -58,10 +58,12 @@ namespace Messenger.Presentation.Controllers
         /// <returns>A newly created access token and a refresh token</returns>
         /// <response code="200">Returns an access token and a refresh token</response>
         /// <response code="400">If the request body is null</response>
+        /// <response code="401">The user does not exist</response>
         /// <response code="422">If the user data is invalid</response>
         [HttpPost("login")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(422)]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> Authenticate([FromBody] UserForAuthenticationDto user)

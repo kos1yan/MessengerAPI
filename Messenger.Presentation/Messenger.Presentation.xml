@@ -55,6 +55,7 @@
             <returns>A newly created access token and a refresh token</returns>
             <response code="200">Returns an access token and a refresh token</response>
             <response code="400">If the request body is null</response>
+            <response code="401">The user does not exist</response>
             <response code="422">If the user data is invalid</response>
         </member>
         <member name="M:Messenger.Presentation.Controllers.ChannelMessagesController.GetChannelMessages(System.Guid,Shared.RequestFeatures.ChannelMessageParameters)">
