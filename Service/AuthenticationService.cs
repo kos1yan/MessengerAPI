@@ -93,7 +93,8 @@ namespace Service
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, _user.AccountId.ToString(), nameof(Guid))
+                new Claim(ClaimTypes.NameIdentifier, _user.AccountId.ToString(), nameof(Guid)),
+                new Claim(ClaimTypes.Email, _user.Email)
             };
 
             var roles = await _userManager.GetRolesAsync(_user);
