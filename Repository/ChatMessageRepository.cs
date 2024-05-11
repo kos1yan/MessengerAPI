@@ -17,7 +17,7 @@ namespace Repository
         public async Task<PagedList<ChatMessage>> GetChatMessagesAsync(Guid chatId, ChatMessageParameters chatMessageParameters, bool trackChanges)
         {
             var chatMessages = await FindByCondition(c => c.ChatId.Equals(chatId),trackChanges)
-                            .OrderBy(c =>c.PublicationTime)
+                            .OrderByDescending(c =>c.PublicationTime)
                             .Skip((chatMessageParameters.PageNumber - 1) * chatMessageParameters.PageSize)
                             .Take(chatMessageParameters.PageSize)
                             .ToListAsync();

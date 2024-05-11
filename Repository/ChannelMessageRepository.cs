@@ -18,7 +18,7 @@ namespace Repository
         public async Task<PagedList<ChannelMessage>> GetChannelMessagesAsync(Guid channelId, ChannelMessageParameters channelMessageParameters, bool trackChanges)
         {
             var channelMessages = await FindByCondition(c => c.ChannelId.Equals(channelId), trackChanges)
-                            .OrderBy(c => c.PublicationTime)
+                            .OrderByDescending(c => c.PublicationTime)
                             .Skip((channelMessageParameters.PageNumber - 1) * channelMessageParameters.PageSize)
                             .Take(channelMessageParameters.PageSize)
                             .ToListAsync();
