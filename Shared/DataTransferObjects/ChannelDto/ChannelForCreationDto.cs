@@ -10,8 +10,6 @@ namespace Shared.DataTransferObjects.ChannelDto
 {
     public record ChannelForCreationDto
     {
-        [Required(ErrorMessage = "ConnectionId is a required field.")]
-        public Guid? ConnectionId { get; set; }
         [Required(ErrorMessage = "Name is a required field.")]
         [MaxLength(50, ErrorMessage = "Maximum name length 50 characters!")]
         public string? Name { get; init; }

@@ -84,6 +84,7 @@ namespace Service
             var account = await _repository.Account.GetAccountAsync(accountId, trackChanges);
             if (account is null) throw new AccountNotFoundException(accountId);
             var channel = _mapper.Map<Channel>(channelForCreation);
+            channel.ConnectionId = Guid.NewGuid();
             if (channelForCreation.Image != null)
             {
                 var result = await _repository.Photo.AddPhotoAsync(channelForCreation.Image);

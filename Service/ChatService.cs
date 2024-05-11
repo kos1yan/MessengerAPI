@@ -85,6 +85,7 @@ namespace Service
             var account = await _repository.Account.GetAccountAsync(accountId, trackChanges);
             if (account is null) throw new AccountNotFoundException(accountId);
             var chat = _mapper.Map<Chat>(chatForCreation);
+            chat.ConnectionId = Guid.NewGuid();
             if (chatForCreation.Image != null)
             {
                 var result = await _repository.Photo.AddPhotoAsync(chatForCreation.Image);
