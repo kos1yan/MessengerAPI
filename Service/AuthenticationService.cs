@@ -93,14 +93,14 @@ namespace Service
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, _user.AccountId.ToString(), nameof(Guid)),
-                new Claim(ClaimTypes.Email, _user.Email)
+                new Claim("userId", _user.AccountId.ToString()),
+                new Claim("userEmail", _user.Email)
             };
 
             var roles = await _userManager.GetRolesAsync(_user);
             foreach (var role in roles)
             {
-                claims.Add(new Claim(ClaimTypes.Role, role));
+                claims.Add(new Claim("userRole", role));
             }
             return claims;
         }
@@ -153,7 +153,7 @@ namespace Service
         public async Task<TokenDto> RefreshToken(TokenDto tokenDto)
         {
             var principal = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
-            var user = await _userManager.FindByEmailAsync(principal.FindFirst(ClaimTypes.Email).Value);
+            var user = await _userManager.FindByEmailAsync(principal.FindFirst("userEmail").Value);
             if (user == null || user.RefreshToken != tokenDto.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
                 throw new RefreshTokenBadRequest();
             _user = user;
