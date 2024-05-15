@@ -42,7 +42,7 @@ namespace Messenger.Presentation.Hubs
 
         public override async Task OnConnectedAsync()
         {
-            var channels = await _service.ChannelService.GetAccountChannelsAsync(Context.UserIdentifier);
+            var channels = await _service.ChannelService.GetAccountChannelsAsync(Context.User.Claims.Where(x => x.Type == "userId").First().Value);
             foreach (var channel in channels)
             {
                 await Groups.AddToGroupAsync(Context.ConnectionId, channel.ConnectionId.ToString());

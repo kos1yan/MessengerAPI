@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Service.Contracts;
 using Shared.DataTransferObjects.ChatMessageDto;
 using Shared.RequestFeatures;
@@ -45,7 +46,7 @@ namespace Messenger.Presentation.Hubs
 
         public override async Task OnConnectedAsync()
         {
-            var chats = await _service.ChatService.GetAccountChatsAsync(Context.UserIdentifier);
+            var chats = await _service.ChatService.GetAccountChatsAsync(Context.User.Claims.Where(x => x.Type == "userId").First().Value);
             foreach (var chat in chats)
             {
                 await Groups.AddToGroupAsync(Context.ConnectionId, chat.ConnectionId.ToString());
