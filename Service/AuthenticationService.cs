@@ -20,6 +20,7 @@ using System.Security.Cryptography;
 using Entities.Exceptions;
 using Entities.ConfigurationModels;
 using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
 
 namespace Service
 {
@@ -129,34 +130,16 @@ namespace Service
             }
         }
 
-        private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+        public async Task<TokenDto> RefreshToken(string refreshToken)
         {
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateAudience = true,
-                ValidateIssuer = true,
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfiguration.SecretKey)),
-                ValidateLifetime = false,
-                ValidIssuer = _jwtConfiguration.ValidIssuer,
-                ValidAudience = _jwtConfiguration.ValidAudience
-            };
-            var tokenHandler = new JwtSecurityTokenHandler();
-            SecurityToken securityToken;
-            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
-            var jwtSecurityToken = securityToken as JwtSecurityToken;
-            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-                throw new SecurityTokenException("Invalid token");
-            return principal;
-        }
+            
+            var user = await _userManager.Users.Where(x => x.RefreshToken == refreshToken)
+                .FirstOrDefaultAsync();
 
-        public async Task<TokenDto> RefreshToken(TokenDto tokenDto)
-        {
-            var principal = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
-            var user = await _userManager.FindByEmailAsync(principal.FindFirst("userEmail").Value);
-            if (user == null || user.RefreshToken != tokenDto.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
-                throw new RefreshTokenBadRequest();
+            if (user is null || user.RefreshTokenExpiryTime <= DateTime.Now) throw new RefreshTokenBadRequest();
+
             _user = user;
+
             return await CreateToken(populateExp: false);
         }
     }

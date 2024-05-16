@@ -313,15 +313,14 @@
             <response code="204">Successful removal</response>
             <response code="404">If the account doesn't exist in the database or if the contact doesn't exist in the database</response>
         </member>
-        <member name="M:Messenger.Presentation.Controllers.TokenController.Refresh(Shared.DataTransferObjects.UserDto.TokenDto)">
+        <member name="M:Messenger.Presentation.Controllers.TokenController.Refresh(System.String)">
             <summary>
             Generates a new access token and refresh token
             </summary>
-            <param name="tokenDto">The invalid acces token and the valid refresh token</param>
+            <param name="refreshToken">The valid refresh token</param>
             <returns>A newly created access token and a refresh token</returns>
             <response code="200">Returns an access token and a refresh token</response>
-            <response code="400">If the request body is null or if the token has some invalid values.</response>
-            <response code="422">If the token data is invalid</response>
+            <response code="400">If the header is null or if the token has some invalid values.</response>
         </member>
     </members>
 </doc>
