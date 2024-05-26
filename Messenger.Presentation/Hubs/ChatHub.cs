@@ -26,7 +26,7 @@ namespace Messenger.Presentation.Hubs
        
         public async Task SendMessageToChat(ChatHubMessageParameters message)
         {
-            await Clients.Group(message.ConnectionId.ToString()).ReceiveMessage(message.AccountId, message.Text, message.Image);
+            await Clients.Group(message.ConnectionId.ToString()).ReceiveMessage(message.AccountId, message.Text, message.Image, message.ChatId);
         }
 
         public async Task AddToChat(ChatHubGroupsParameters parameters)

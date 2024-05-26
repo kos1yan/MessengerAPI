@@ -10,7 +10,7 @@ namespace Service.Contracts
 
     public interface IChatClient
     {
-        Task ReceiveMessage(Guid? user, string? message, string? Image);
+        Task ReceiveMessage(Guid? user, string? message, string? Image, Guid? chatId);
         Task ReceiveMessage(string message);
     }
 }
