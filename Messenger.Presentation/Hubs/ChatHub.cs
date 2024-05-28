@@ -29,6 +29,16 @@ namespace Messenger.Presentation.Hubs
             await Clients.Group(message.ConnectionId.ToString()).ReceiveMessage(message.AccountId, message.Text, message.Image, message.ChatId, message.Id);
         }
 
+        public async Task DeleteChatMessage(ChatHubMessageParameters message)
+        {
+            await Clients.Group(message.ConnectionId.ToString()).DeleteNotification(message.ChatId, message.Id);
+        }
+
+        public async Task EditChatMessage(ChatHubMessageParameters message)
+        {
+            await Clients.Group(message.ConnectionId.ToString()).EditNotification(message.AccountId, message.ChatId, message.Id, message.Text, message.Image);
+        }
+
         public async Task AddToChat(ChatHubGroupsParameters parameters)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, parameters.ConnectionId.ToString());
