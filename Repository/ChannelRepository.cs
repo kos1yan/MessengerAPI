@@ -39,8 +39,9 @@ namespace Repository
                 .Skip((channelParameters.PageNumber - 1) * channelParameters.PageSize)
                 .Take(channelParameters.PageSize)
                 .ToList();
+            var count = account.Channels.Search(channelParameters.SearchTerm).Count();
 
-            return new PagedList<Channel>(channels, channels.Count, channelParameters.PageNumber, channelParameters.PageSize);
+            return new PagedList<Channel>(channels, count, channelParameters.PageNumber, channelParameters.PageSize);
         }
         public async Task<IEnumerable<Channel>> GetAccountChannelsAsync(string accountId)
         {

@@ -38,8 +38,9 @@ namespace Repository
                 .Skip((chatParameters.PageNumber - 1) * chatParameters.PageSize)
                 .Take(chatParameters.PageSize)
                 .ToList();
-            
-            return new PagedList<Chat>(chats, chats.Count, chatParameters.PageNumber, chatParameters.PageSize);
+            var count = account.Chats.Search(chatParameters.SearchTerm).Count();
+
+            return new PagedList<Chat>(chats, count, chatParameters.PageNumber, chatParameters.PageSize);
         }
         public async Task<IEnumerable<Chat>> GetAccountChatsAsync(string accountId)
         {
