@@ -19,26 +19,31 @@ namespace Repository
         
         public async Task<PagedList<Chat>> GetChatsAsync(ChatParameters chatParameters, bool trackChanges)
         {
-            var chats = await FindAll(trackChanges).Search(chatParameters.SearchTerm)
-                .OrderBy(c => c.Name)
+            var chats = await _repositoryContext.Chats.Search(chatParameters.SearchTerm)
+                .OrderByDescending(c => c.ChatMessages.OrderByDescending(c => c.PublicationTime).FirstOrDefault())
                 .Skip((chatParameters.PageNumber - 1) * chatParameters.PageSize)
                 .Take(chatParameters.PageSize)
                 .ToListAsync();
-            var count = await FindAll(trackChanges).Search(chatParameters.SearchTerm).CountAsync();
 
+            var count = await FindAll(trackChanges).Search(chatParameters.SearchTerm).CountAsync();
 
             return new PagedList<Chat>(chats, count, chatParameters.PageNumber, chatParameters.PageSize);
 
         }
         public async Task<PagedList<Chat>> GetAccountChatsAsync(Guid accountId, ChatParameters chatParameters)
         {
-            var account = await _repositoryContext.Accounts.Include(c => c.Chats).Where(c =>c.Id.Equals(accountId)).SingleOrDefaultAsync();
-            var chats = account.Chats.Search(chatParameters.SearchTerm)
-                .OrderBy(c => c.Name)
+            var account = await _repositoryContext.Accounts.Where(c => c.Id.Equals(accountId)).SingleOrDefaultAsync();
+
+            var chats = await _repositoryContext.Chats.Where(c => c.Accounts.Contains(account))
+                .Search(chatParameters.SearchTerm)
+                .OrderByDescending(c => c.ChatMessages.OrderByDescending(c => c.PublicationTime).FirstOrDefault())
                 .Skip((chatParameters.PageNumber - 1) * chatParameters.PageSize)
                 .Take(chatParameters.PageSize)
-                .ToList();
-            var count = account.Chats.Search(chatParameters.SearchTerm).Count();
+                .ToListAsync();
+
+            var count = await _repositoryContext.Chats.Where(c => c.Accounts.Contains(account))
+                .Search(chatParameters.SearchTerm)
+                .CountAsync();
 
             return new PagedList<Chat>(chats, count, chatParameters.PageNumber, chatParameters.PageSize);
         }

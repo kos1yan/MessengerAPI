@@ -21,25 +21,32 @@ namespace Repository
 
         public async Task<PagedList<Channel>> GetChannelsAsync(ChannelParameters channelParameters, bool trackChanges)
         {
-            var channels = await FindAll(trackChanges).Search(channelParameters.SearchTerm)
-                .OrderBy(c => c.Name)
+            var channels = await _repositoryContext.Channels.Search(channelParameters.SearchTerm)
+                .OrderByDescending(c => c.ChannelMessages.OrderByDescending(c => c.PublicationTime).FirstOrDefault())
                 .Skip((channelParameters.PageNumber - 1) * channelParameters.PageSize)
                 .Take(channelParameters.PageSize)
                 .ToListAsync();
+
             var count = await FindAll(trackChanges).Search(channelParameters.SearchTerm).CountAsync();
+
 
 
             return new PagedList<Channel>(channels, count, channelParameters.PageNumber, channelParameters.PageSize);
         }
         public async Task<PagedList<Channel>> GetAccountChannelsAsync(Guid accountId, ChannelParameters channelParameters)
         {
-            var account = await _repositoryContext.Accounts.Include(c => c.Channels).Where(c => c.Id.Equals(accountId)).SingleOrDefaultAsync();
-            var channels = account.Channels.Search(channelParameters.SearchTerm)
-                .OrderBy(c => c.Name)
+            var account = await _repositoryContext.Accounts.Where(c => c.Id.Equals(accountId)).SingleOrDefaultAsync();
+
+            var channels = await _repositoryContext.Channels.Where(c => c.Accounts.Contains(account))
+                .Search(channelParameters.SearchTerm)
+                .OrderByDescending(c => c.ChannelMessages.OrderByDescending(c => c.PublicationTime).FirstOrDefault())
                 .Skip((channelParameters.PageNumber - 1) * channelParameters.PageSize)
                 .Take(channelParameters.PageSize)
-                .ToList();
-            var count = account.Channels.Search(channelParameters.SearchTerm).Count();
+                .ToListAsync();
+
+            var count = await _repositoryContext.Channels.Where(c => c.Accounts.Contains(account))
+                .Search(channelParameters.SearchTerm)
+                .CountAsync();
 
             return new PagedList<Channel>(channels, count, channelParameters.PageNumber, channelParameters.PageSize);
         }
