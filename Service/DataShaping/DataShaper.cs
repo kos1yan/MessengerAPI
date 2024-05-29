@@ -64,7 +64,7 @@ namespace Service.DataShaping
             foreach (var property in requiredProperties)
             {
                 var objectPropertyValue = property.GetValue(entity);
-                shapedObject.TryAdd(property.Name, objectPropertyValue);
+                shapedObject.TryAdd(property.Name.Replace(property.Name[0], char.ToLowerInvariant(property.Name[0])), objectPropertyValue);
             }
             return shapedObject;
         }
