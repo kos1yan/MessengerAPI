@@ -50,8 +50,19 @@ namespace Service
 
             var chatsWithMetaData = await _repository.Chat.GetAccountChatsAsync(accountId, chatsParameters);
             var chatsDto = _mapper.Map<IEnumerable<ChatDto>>(chatsWithMetaData);
-            var shapedData = _dataShaper.ShapeData(chatsDto, chatsParameters.Fields);
 
+            foreach (var chatDto in chatsDto)
+            {
+                chatDto.MembersAccounts = _mapper.Map<IEnumerable<ChatMemberDto>>(await _repository.Chat.GetChatMembersAccountsAsync(chatDto.Id, trackChanges));
+
+                foreach (var member in chatDto.MembersAccounts)
+                {
+                    var chatMember = await _repository.Chat.GetChatMemberAsync(member.Id, chatDto.Id);
+                    member.ChatRole = chatMember.ChatRole;
+                }
+            }
+
+            var shapedData = _dataShaper.ShapeData(chatsDto, chatsParameters.Fields);
 
             return (chats: shapedData, metaData: chatsWithMetaData.MetaData);
         }

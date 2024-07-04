@@ -43,7 +43,7 @@ namespace Messenger.Presentation.Hubs
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, parameters.ConnectionId.ToString());
 
-            await Clients.Group(parameters.ConnectionId.ToString()).ReceiveMessage($"{parameters.AccountName} has joined the group.");
+            await Clients.Group(parameters.ConnectionId.ToString()).AddToGroup(parameters.AccountIdToAdd, parameters.AccountId, parameters.ChatId);
 
         }
 
@@ -51,7 +51,12 @@ namespace Messenger.Presentation.Hubs
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, parameters.ConnectionId.ToString());
 
-            await Clients.Group(parameters.ConnectionId.ToString()).ReceiveMessage($"{parameters.AccountName} has left the group.");
+            await Clients.Group(parameters.ConnectionId.ToString()).RemoveFromGroup(parameters.AccountId, parameters.ChatId);
+        }
+
+        public async Task DeleteChat(ChatHubGroupsParameters parameters)
+        {
+            await Clients.Group(parameters.ConnectionId.ToString()).DeleteGroup(parameters.ChatId);
         }
 
         public override async Task OnConnectedAsync()

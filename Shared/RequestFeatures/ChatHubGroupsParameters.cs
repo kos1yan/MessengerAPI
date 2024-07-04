@@ -8,7 +8,9 @@ namespace Shared.RequestFeatures
 {
     public class ChatHubGroupsParameters
     {
-        public string? AccountName {  get; init; }
+        public Guid? AccountId {  get; init; }
+        public Guid? AccountIdToAdd {  get; init; }
+        public Guid? ChatId {  get; init; }
         public Guid? ConnectionId {  get; init; }
     }
 }
