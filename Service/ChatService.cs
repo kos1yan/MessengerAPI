@@ -144,14 +144,15 @@ namespace Service
             await _repository.SaveAsync();
         }
 
-        public async Task<(Dictionary<string, List<ChatMessageDto>> chatMessages, MetaData metaData)> GetChatMessagesAsync(Guid chatId, ChatMessageParameters chatMessageParameters, bool trackChanges)
+        public async Task<(List<ChatMessageGroupByDateDto> chatMessages, MetaData metaData)> GetChatMessagesAsync(Guid chatId, ChatMessageParameters chatMessageParameters, bool trackChanges)
         {
             var chat = await _repository.Chat.GetChatAsync(chatId, trackChanges);
             if (chat is null) throw new ChatNotFoundException(chatId);
             var chatMessagesWithMetaData = await _repository.ChatMessage.GetChatMessagesAsync(chatId, chatMessageParameters, trackChanges);
             var chatMessagesDto = _mapper.Map<IEnumerable<ChatMessageDto>>(chatMessagesWithMetaData);
             var chatMessagesDictionary = new Dictionary<string, List<ChatMessageDto>>();
-            
+            var chatMessageGroupByDateDto = new List<ChatMessageGroupByDateDto>();
+
             foreach (var message in chatMessagesDto)
             {
                 var account = await _repository.Account.GetAccountAsync(message.AccountId, false);
@@ -169,7 +170,12 @@ namespace Service
                 }
             }
 
-            return (chatMessages: chatMessagesDictionary, metaData: chatMessagesWithMetaData.MetaData);
+            foreach (var message in chatMessagesDictionary)
+            {
+                chatMessageGroupByDateDto.Add(new ChatMessageGroupByDateDto { Date = message.Key, ChatMessages = message.Value });
+            }
+
+            return (chatMessages: chatMessageGroupByDateDto, metaData: chatMessagesWithMetaData.MetaData);
         }
         public async Task<ChatMessageDto> CreateChatMessageAsync(Guid chatId, ChatMessageForCreationDto messageForCreation, bool trackChanges)
         {
