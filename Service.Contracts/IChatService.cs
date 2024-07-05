@@ -23,7 +23,7 @@ namespace Service.Contracts
         Task LeaveChatAsync(Guid accountId, Guid chatId, bool trackChanges);
         Task UpdateChatAsync(Guid chatId, ChatForUpdateDto chatForUpdate, bool chatTrackChanges, bool accountTrackChanges);
 
-        Task<(IEnumerable<ChatMessageDto> chatMessages, MetaData metaData)> GetChatMessagesAsync(Guid chatId, ChatMessageParameters chatMessageParameters, bool trackChanges);
+        Task<(Dictionary<string, List<ChatMessageDto>> chatMessages, MetaData metaData)> GetChatMessagesAsync(Guid chatId, ChatMessageParameters chatMessageParameters, bool trackChanges);
         Task<ChatMessageDto> GetChatMessageAsync(Guid messageId, bool trackChanges);
         Task<ChatMessageDto> CreateChatMessageAsync(Guid chatId, ChatMessageForCreationDto messageForCreation, bool trackChanges);
         Task DeleteChatMessageAsync(Guid chatMessageId, bool trackChanges);

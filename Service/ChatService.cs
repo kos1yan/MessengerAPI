@@ -144,23 +144,32 @@ namespace Service
             await _repository.SaveAsync();
         }
 
-        public async Task<(IEnumerable<ChatMessageDto> chatMessages, MetaData metaData)> GetChatMessagesAsync(Guid chatId, ChatMessageParameters chatMessageParameters, bool trackChanges)
+        public async Task<(Dictionary<string, List<ChatMessageDto>> chatMessages, MetaData metaData)> GetChatMessagesAsync(Guid chatId, ChatMessageParameters chatMessageParameters, bool trackChanges)
         {
             var chat = await _repository.Chat.GetChatAsync(chatId, trackChanges);
             if (chat is null) throw new ChatNotFoundException(chatId);
             var chatMessagesWithMetaData = await _repository.ChatMessage.GetChatMessagesAsync(chatId, chatMessageParameters, trackChanges);
             var chatMessagesDto = _mapper.Map<IEnumerable<ChatMessageDto>>(chatMessagesWithMetaData);
-
+            var chatMessagesDictionary = new Dictionary<string, List<ChatMessageDto>>();
+            
             foreach (var message in chatMessagesDto)
             {
                 var account = await _repository.Account.GetAccountAsync(message.AccountId, false);
                 if (account is null) continue;
-                
+
                 message.AccountName = account.UserName;
                 message.AccountImage = account.Image;
+
+                if (chatMessagesDictionary.ContainsKey(message.PublicationTime.ToShortDateString())) 
+                    chatMessagesDictionary[message.PublicationTime.ToShortDateString()].Add(message);
+                else
+                {
+                    var list = new List<ChatMessageDto> { message };
+                    chatMessagesDictionary.Add(message.PublicationTime.ToShortDateString(), list);
+                }
             }
 
-            return (chatMessages: chatMessagesDto, metaData: chatMessagesWithMetaData.MetaData);
+            return (chatMessages: chatMessagesDictionary, metaData: chatMessagesWithMetaData.MetaData);
         }
         public async Task<ChatMessageDto> CreateChatMessageAsync(Guid chatId, ChatMessageForCreationDto messageForCreation, bool trackChanges)
         {
